@@ -22,9 +22,13 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // väljer endpoint pokémo
         
         btnOpen.addEventListener('click', () => { 
             pokedex.appendChild(pokediv); // appendar div-elementen till pokédex-div (öppna)
+            btnOpen.style.display = "none";
+            btnClose.style.display = "block";
         });        
         btnClose.addEventListener('click', () => { 
             pokedex.removeChild(pokediv); // tar bort div-elementen från pokédex-div (stäng)
+            btnClose.style.display = "none";
+            btnOpen.style.display = "block";
         });
         
         const pokemonURL = `${pokemon.url}`; // url till pokémonens egna api (med fler egenskaper)
@@ -40,8 +44,10 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // väljer endpoint pokémo
                 poke_data_div.innerHTML = `
                 <img src="${pokemonData.sprites.front_default}" />
                 <img src="${pokemonData.sprites.back_default}" />
-                <h2>${pokemonData.name}</h2>
+                <h2>no ${pokemonData.id} ${pokemonData.name}</h2>
                 <p>no ${pokemonData.id}</p>
+                <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
+                <button onclick="document.getElementById('player-${pokemonData.id}').play()">Rawr!</button>
                 `;
 
                 pokediv.appendChild(poke_data_div);
