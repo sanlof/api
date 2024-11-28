@@ -1,6 +1,7 @@
 /* Pokémon API = https://pokeapi.co/api/v2/{endpoint}/ */
 
 const pokedex = document.getElementById('pokedex'); // hitta pokédex-diven
+const pokemon_list = document.getElementById('pokemon-list'); // hitta pokédex-diven
 
 fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // väljer endpoint pokémon och begränsar mig till första generationen som omfattar de första 150, från bulbasaur (1) till mew (151)
 .then(response => response.json())
@@ -13,20 +14,19 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // väljer endpoint pokémo
     // här loopar jag alla pokémon från arrayen
     pokemons.forEach(pokemon => { 
 
-        const pokediv = document.createElement('div'); // skapar ett div-element för varje pokémon
-        pokediv.setAttribute('id', pokemon.name); // ger diven pokemonens namn som id
-        pokediv.classList.add('poke-div'); // ger diven en class så man kan appenda mer data i senare
+        const pokemon_li = document.createElement('li'); // skapar ett div-element för varje pokémon
+        pokemon_li.classList.add('poke-div'); // ger diven en class så man kan appenda mer data i senare
         
         const btnOpen = document.getElementById('open');
         const btnClose = document.getElementById('close');
         
         btnOpen.addEventListener('click', () => { 
-            pokedex.appendChild(pokediv); // appendar div-elementen till pokédex-div (öppna)
+            pokemon_list.appendChild(pokemon_li); // appendar div-elementen till pokédex-div (öppna)
             btnOpen.style.display = "none";
             btnClose.style.display = "block";
         });        
         btnClose.addEventListener('click', () => { 
-            pokedex.removeChild(pokediv); // tar bort div-elementen från pokédex-div (stäng)
+            pokemon_list.removeChild(pokemon_li); // tar bort div-elementen från pokédex-div (stäng)
             btnClose.style.display = "none";
             btnOpen.style.display = "block";
         });
@@ -39,6 +39,15 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // väljer endpoint pokémo
                 const pokemonData = await response.json();
                 console.log(pokemonData); // så jag kan kolla api:ns innehåll via dev tools
 
+                const poke_data_li = document.createElement('div'); // skapa ett div-element
+                poke_data_li.classList.add('poke-data-div'); // ge div en class
+                poke_data_li.innerHTML = `
+                <img src="${pokemonData.sprites.front_default}" id="${pokemonData.name}" alt="${pokemonData.name}" title="${pokemonData.name}" />
+                <img src="${pokemonData.sprites.back_default}" id="${pokemonData.name}_back" style="display:none" />
+                `;
+
+                pokemon_li.appendChild(poke_data_li);
+
                 const poke_data_div = document.createElement('div'); // skapa ett div-element
                 poke_data_div.classList.add('poke-data-div'); // ge div en class
                 poke_data_div.innerHTML = `
@@ -49,8 +58,18 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // väljer endpoint pokémo
                 <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
                 <button onclick="document.getElementById('player-${pokemonData.id}').play()">Rawr!</button>
                 `;
+                // pokedex.appendChild(poke_data_div); UTKOMMENTERAD FÖR VILL ATT MENY SKA FUNKA
 
-                pokediv.appendChild(poke_data_div);
+                document.body.addEventListener('click', (event) => {
+                    if (event.target.id === pokemonData.name) {
+                        const pokedex = document.getElementById('pokedex');
+                        pokedex.innerHTML = '';
+                        pokedex.appendChild(poke_data_div);
+                    }
+                });
+
+                
+                btnOpen.style.display = "block";
 
             } catch (error) {
                 console.error(error);
