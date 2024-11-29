@@ -1,5 +1,8 @@
 :root {
     
+    /* färger */
+    --black: #222;
+    --white: #fafafa;
 
 }
 
@@ -13,7 +16,9 @@ html {
 }
 
 body {
-    font: 9px verdana;
+    background: var(--white);
+    color: var(--black);
+    font: 16px 'tiny5', verdana;
 }
 
 header {
