@@ -24,7 +24,6 @@ if (checkbox_pokemon.checked) {
         pokemons.forEach(pokemon => { 
     
             const pokemon_li = document.createElement('li'); // skapar ett div-element för varje pokémon
-            pokemon_li.classList.add('poke-div'); // ger diven en class så man kan appenda mer data i senare
             
             pokemon_list.appendChild(pokemon_li); // appendar div-elementen till pokédex-div (öppna)
             
@@ -40,16 +39,15 @@ if (checkbox_pokemon.checked) {
                     poke_data_li.classList.add('poke-data-div'); // ge div en class
                     poke_data_li.innerHTML = `
                     <img src="${pokemonData.sprites.front_default}" id="${pokemonData.name}" alt="${pokemonData.name}" title="${pokemonData.name}" />
-                    <img src="${pokemonData.sprites.back_default}" id="${pokemonData.name}_back" style="display:none" />
                     `;
     
                     pokemon_li.appendChild(poke_data_li);
     
                     const poke_data_div = document.createElement('div'); // skapa ett div-element
-                    poke_data_div.classList.add('poke-data-div'); // ge div en class
+                    const poke_type = pokemonData.types["0"]["type"]["name"];
+                    poke_data_div.classList.add(`${poke_type}`); // ge div en class
                     poke_data_div.innerHTML = `
-                    <img src="${pokemonData.sprites.other.dream_world.front_default}" />
-                    <img src="${pokemonData.sprites.back_default}" />
+                    <img src="${pokemonData.sprites.other.home.front_default}" alt="${pokemonData.name}" title="${pokemonData.name}" />
                     <h2>no ${pokemonData.id} ${pokemonData.name}</h2>
                     <p>no ${pokemonData.id}</p>
                     <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
@@ -105,6 +103,7 @@ if (checkbox_items.checked) {
                     item_data_li.classList.add('poke-data-div'); // ge div en class
                     item_data_li.innerHTML = `
                     <img id="${itemData.name}" src="${itemData.sprites.default}" alt="${itemData.name}" title="${itemData.name}">
+                    
                     `;
     
                     item_li.appendChild(item_data_li);
@@ -132,7 +131,7 @@ if (checkbox_items.checked) {
                 }
             };
     
-            getItems();
+            getItem();
 
         });
     });
