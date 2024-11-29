@@ -21,15 +21,32 @@ body {
     font: 16px 'tiny5', verdana;
 }
 
+img {
+    max-width: 100%;
+}
+
 header {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    #pokemon-list {
+    #menu-list {
         list-style: none;
         margin: 0;
         padding: 0;
+
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30%;
+            aspect-ratio: 1;
+        }
+
     }
 
     @media screen and (min-width: 834px) {
@@ -44,6 +61,10 @@ header {
 
 main {
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     @media screen and (min-width: 834px) {
         position: fixed;
         top: 0;
@@ -55,15 +76,15 @@ main {
 }
 
 #pokedex {
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
 
-    .poke-div {  
-        width: 20rem;
-        background: red;
+    .poke-data {  
+        padding: 3.2rem;
         flex-shrink: 0;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
         h2 {
             text-transform: uppercase;
