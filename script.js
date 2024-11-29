@@ -1,14 +1,14 @@
 /* Pokémon API = https://pokeapi.co/api/v2/{endpoint}/ */
 
 const pokedex = document.getElementById('pokedex'); // hitta pokédex-diven
-const pokemon_list = document.getElementById('pokemon-list'); // hitta pokédex-diven
+const menu_list = document.getElementById('menu-list'); // hitta pokédex-diven
 const checkbox_pokemon = document.getElementById('checkbox-pokemon'); // alternativ pokémon
 const checkbox_items = document.getElementById('checkbox-items'); // alternativ items
 const btnFetch = document.getElementById('fetchButton');
 
 btnFetch.addEventListener('click', (event) => {
     event.preventDefault(); // förhindra att sidan uppdateras när man skickar formuläret
-    pokemon_list.innerHTML = ''; // töm listan ifall man avmarkerat något alternativ
+    menu_list.innerHTML = ''; // töm listan ifall man avmarkerat något alternativ
 
 if (checkbox_pokemon.checked) {
 
@@ -25,7 +25,7 @@ if (checkbox_pokemon.checked) {
     
             const pokemon_li = document.createElement('li'); // skapar ett div-element för varje pokémon
             
-            pokemon_list.appendChild(pokemon_li); // appendar div-elementen till pokédex-div (öppna)
+            menu_list.appendChild(pokemon_li); // appendar div-elementen till pokédex-div (öppna)
             
             const pokemonURL = `${pokemon.url}`; // url till pokémonens egna api (med fler egenskaper)
     
@@ -45,14 +45,19 @@ if (checkbox_pokemon.checked) {
     
                     const poke_data_div = document.createElement('div'); // skapa ett div-element
                     const poke_type = pokemonData.types["0"]["type"]["name"];
-                    poke_data_div.classList.add(`${poke_type}`); // ge div en class
+                    poke_data_div.classList.add(`${poke_type}`); // ge div en class utifrån pokémons typ
+                    poke_data_div.classList.add('poke-data'); // ge div en class
                     poke_data_div.innerHTML = `
                     <img src="${pokemonData.sprites.other.home.front_default}" alt="${pokemonData.name}" title="${pokemonData.name}" />
                     <h2>no ${pokemonData.id} ${pokemonData.name}</h2>
                     <p>no ${pokemonData.id}</p>
+                    <p>${pokemonData.stats[0].stat.name}: ${pokemonData.stats[0].base_stat}</p>
+                    <p>${pokemonData.stats[1].stat.name}: ${pokemonData.stats[1].base_stat}</p>
+                    <p>${pokemonData.stats[2].stat.name}: ${pokemonData.stats[2].base_stat}</p>
                     <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
                     <button onclick="document.getElementById('player-${pokemonData.id}').play()">Rawr!</button>
                     `;
+
                     // pokedex.appendChild(poke_data_div); UTKOMMENTERAD FÖR VILL ATT MENY SKA FUNKA
     
                     document.body.addEventListener('click', (event) => {
@@ -89,7 +94,7 @@ if (checkbox_items.checked) {
 
         items.forEach(item => { 
             const item_li = document.createElement('li'); // skapar ett li-element för varje item
-            pokemon_list.appendChild(item_li); // appendar li-elementen till menyn
+            menu_list.appendChild(item_li); // appendar li-elementen till menyn
             
             const itemURL = `${item.url}`; // url till itemets egna api (med fler egenskaper)
 
@@ -109,7 +114,7 @@ if (checkbox_items.checked) {
                     item_li.appendChild(item_data_li);
     
                     const poke_data_div = document.createElement('div'); // skapa ett div-element
-                    poke_data_div.classList.add('poke-data-div'); // ge div en class
+                    poke_data_div.classList.add('poke-data'); // ge div en class
                     poke_data_div.innerHTML = `
                     <h2>no ${itemData.id} ${itemData.name}</h2>
                     <img src="${itemData.sprites.default}" alt="${itemData.name}" title="${itemData.name}">
