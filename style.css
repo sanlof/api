@@ -13,12 +13,15 @@
 
 html {
     font-size: 62.5%;
+    min-width: 375px;
 }
 
 body {
     background: var(--white);
     color: var(--black);
     font: 16px 'tiny5', verdana;
+    min-height: 100vh;
+    margin: 0;
 }
 
 img {
@@ -28,66 +31,136 @@ img {
 header {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 
-    #menu-list {
+    ul#menu-list {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
         list-style: none;
         margin: 0;
         padding: 0;
 
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        overflow: auto;
+        scroll-snap-type: x mandatory;
 
         li {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 30%;
+            min-width: 12.8rem;
             aspect-ratio: 1;
+            flex-shrink: 0;
+            background: red;
+            scroll-snap-align: start;
+
+            img {
+                display: block;
+            }
         }
 
     }
 
-    @media screen and (min-width: 834px) {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 20vw;
-        overflow: auto;
-    }
 }
 
 main {
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    @media screen and (min-width: 834px) {
-        position: fixed;
-        top: 0;
-        left: 20vw;
-        height: 100vh;
-        width: 80vw;
-        overflow: auto;
-    }
 }
 
 #pokedex {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 12.8rem;
 
-    .poke-data {  
+    .pokemon-data {  
         padding: 3.2rem;
+        width: 100%;
         flex-shrink: 0;
-        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        border: 5px solid red;
+
+        &.normal {
+            background-color: lightgray;
+        }
+        &.water {
+            background-color: lightskyblue;
+        }
+        &.ice {
+            background-color: rgb(156, 209, 217);
+        }
+        &.fire {
+            background-color: lightsalmon;
+        }
+        &.grass {
+            background-color: rgb(173, 231, 164);
+        }
+        &.bug {
+            background-color: rgb(137, 204, 127);
+        }
+        &.electric {
+            background-color: lightgoldenrodyellow;
+        }
+        &.psychic {
+            background-color: rgb(174, 173, 230);
+        }
+        &.ghost {
+            background-color: rgb(179, 173, 230);
+        }
+        &.poison {
+            background-color: rgb(204, 173, 230);
+        }
+        &.fairy {
+            background-color: rgb(255, 208, 239);
+        }
+        &.dragon {
+            background-color: rgb(225, 236, 255);
+        }
+        &.fighting {
+            background-color: rgb(171, 100, 74);
+        }
+        &.ground {
+            background-color: rgb(196, 168, 158);
+        }
+        &.rock {
+            background-color: rgb(174, 173, 173);
+        }
 
         h2 {
             text-transform: uppercase;
+        }
+
+        button {
+            border: none;
+            height: 4.8rem;
+            padding-left: 4.8rem;
+            background: url(img/sound.svg) no-repeat;
+        }
+
+        .stats {
+            align-self: stretch;
+            padding: 0;
+            margin: 0;
+            
+            div {
+                display: grid;
+                grid-template-columns: 2fr 4fr 1fr;
+
+                p:first-child {
+                    text-transform: uppercase;
+                }
+                p:last-child {
+                    text-align: right;
+                }
+                p.stat-bar {
+                    background-color: red;
+                    max-width: 100%;
+                }
+            }
         }
     }
 }
