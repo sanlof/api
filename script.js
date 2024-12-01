@@ -121,7 +121,6 @@ btnFetch.addEventListener('click', (event) => {
                                 </div>
                                 <p>${pokemon.xp}</p>
                             </div>
-
                             <p class="type">${pokemon.type}</p>
                         </section>
                         <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
@@ -173,10 +172,11 @@ if (checkbox_items.checked) {
                 try {
                     const response = await fetch(itemURL);
                     const itemData = await response.json();
+                    const itemDataName = itemData.name.replace(/-/g, " ");
                     console.log(itemData); // så jag kan kolla api:ns innehåll via dev tools
     
                     item_article.innerHTML = `
-                    <img id="${itemData.name}" src="${itemData.sprites.default}" alt="${itemData.name}" title="${itemData.name}">
+                    <img id="${itemData.name}" src="${itemData.sprites.default}" alt="${itemDataName}" title="${itemDataName}">
                     `;
     
                     const item_data = document.createElement('article'); // skapa en article
@@ -184,9 +184,14 @@ if (checkbox_items.checked) {
                     item_data.setAttribute('id', itemData.name); // ge article items namn som id för styling
                     item_data.innerHTML = `
                     <button id="close">Close</button>
-                    <h2>no ${itemData.id} ${itemData.name}</h2>
+                    <hgroup>
+                        <h2>${itemDataName}</h2>
+                        <p>no ${itemData.id}</p>
+                    </hgroup>
                     <img src="${itemData.sprites.default}" alt="${itemData.name}" title="${itemData.name}">
-                    <p>${itemData.flavor_text_entries[1].text}</p>
+                    <section class="stats">
+                        <p>${itemData.flavor_text_entries[1].text}</p>
+                    </section>
                     `;
 
                     document.body.addEventListener('click', (event) => {
