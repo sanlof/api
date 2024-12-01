@@ -1,7 +1,7 @@
 /* Pokémon API = https://pokeapi.co/api/v2/{endpoint}/ */
 
-const checkbox_pokemon = document.getElementById('checkbox-pokemon'); // alternativ endpoint pokémon
-const checkbox_items = document.getElementById('checkbox-items'); // alternativ endpoint items
+const checkbox_pokemon = document.getElementById('checkbox-pokemon'); // endpoint pokémon
+const checkbox_items = document.getElementById('checkbox-items'); // endpoint items
 const btnFetch = document.getElementById('fetchButton'); // hämta api-data
 
 const pokedex = document.getElementById('pokedex'); // hitta pokédex-diven
@@ -67,11 +67,11 @@ btnFetch.addEventListener('click', (event) => {
                         pokemon_data.setAttribute('id', pokemon.name); // ge id utifrån namn för styling på en viss pokémon
 
                         // räkna om stats till procent
-                        let hpPercentage = calcStatPercentage(pokemon.hp,250); //chansey
+                        let hpPercentage = calcStatPercentage(pokemon.hp, 250); //chansey
                         let attackPercentage = calcStatPercentage(pokemon.attack, 134); //dragonite
                         let defensePercentage = calcStatPercentage(pokemon.defense, 180); //cloyster
                         let speedPercentage = calcStatPercentage(pokemon.speed, 140); //electrode
-                        let xpPercentage = calcStatPercentage(pokemon.xp, 340); //mewtwo
+                        let xpPercentage = calcStatPercentage(pokemon.xp, 395); //chansey
                         function calcStatPercentage(currentStat,maxStat) {
                             let statPercentage = (currentStat / maxStat) * 100;
                             return Math.round(statPercentage);
