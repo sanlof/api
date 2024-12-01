@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Ketchum';
+    src: url('fonts/Ketchum.otf');
+}
+
 :root {
     
     /* färger */
@@ -54,16 +59,10 @@ a {
 }
 
 @keyframes button {
-    0%, 100% {
+    0%, 30%, 100% {
         transform: scale(1);
     }
-    5% {
-        transform: scale(.9);
-    }
-    30% {
-        transform: scale(1);
-    }
-    40% {
+    5%, 40% {
         transform: scale(.9);
     }
 }
@@ -102,7 +101,7 @@ header {
     }
 
     h1 {
-        font: bold 4rem 'roboto condensed';
+        font: bold 4rem 'ketchum';
         color: var(--white);
         text-shadow: .1rem .1rem 0rem black;
         margin-bottom: 0;
@@ -145,24 +144,13 @@ header {
             radial-gradient(circle, 
             rgba(255, 255, 255, 1) 50%, 
             rgba(134, 134, 134, 1) 100%);
-            border: 1rem solid var(--black);
+            border: 2rem solid var(--black);
             margin: 2rem 0;
-            animation: button 3s ease-in-out;
+            animation: button 3s ease-out;
             animation-iteration-count: 3;
             text-transform: uppercase;
             font-weight: bold;
             color: lightgrey;
-            
-            &::after {
-                content:"";
-                width: 6rem;
-                height: 6rem;
-                border-radius: 50%;
-                border: .5rem solid lightgrey;
-                position: absolute;
-                left: 17%; top: 17%;
-                z-index: 2;
-            }
             
             @media (hover: hover) {
                 &:hover { transform: scale(.9); }
@@ -252,8 +240,8 @@ main {
             text-align: center;
 
             h2 {
-                text-transform: uppercase;
-                letter-spacing: .1rem;
+                font: normal 4rem 'ketchum';
+                text-transform: capitalize;
             }
         }
 
@@ -269,14 +257,17 @@ main {
             margin: 0;
             background: var(--white);
             padding: var(--padding);
+            padding-top: 13.2rem;
             margin-top: -6.8rem;
-            padding-top: 9.6rem;
+            margin-bottom: 3.2rem;
             z-index: 1;
             font-family: 'roboto condensed';
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            border-radius: 3.2rem;
+            max-width: 64rem;
             
             div {
                 width: 100%;
