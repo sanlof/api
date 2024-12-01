@@ -81,22 +81,30 @@ header {
     background: rgb(213,0,0);
     background: 
     linear-gradient(180deg, 
-    rgba(213,0,0,1) 44%, 
-    rgba(34, 34, 34,1) 44%, 
-    rgba(34, 34, 34,1) 53%, 
-    rgba(255,255,255,.5) 53%, 
-    rgba(255,255,255,0));
+    rgba(213, 0, 0, 1) 44%, 
+    rgba(34, 34, 34, 1) 44%, 
+    rgba(34, 34, 34, 1) 53%, 
+    rgba(255, 255, 255, .7) 53%, 
+    rgba(255, 255, 255, 0));
 
     @media screen and (min-width: 1200px) {
         width: 20vw;
         height: 100vh;
         position: fixed;
-        box-shadow: 0rem 0 2rem pink;
+        box-shadow: 0rem 0 2rem lightgrey;
+        background: 
+        linear-gradient(180deg, 
+        rgba(213, 0, 0, 1) 46%, 
+        rgba(34, 34, 34, 1) 46%, 
+        rgba(34, 34, 34, 1) 51%, 
+        rgba(255, 255, 255,.5) 0%);
     }
 
     h1 {
-        font-family: 'roboto condensed';
+        font: bold 4rem 'roboto condensed';
         color: var(--white);
+        text-shadow: .1rem .1rem 0rem black;
+        margin-bottom: 0;
     }
 
     form {
@@ -105,42 +113,59 @@ header {
         align-items: center;
         margin-bottom: 5rem;
 
-        label {
-            order: 1;
-        }
-        label, button, input {
+        label, input, button {
             cursor: pointer;
             opacity: 1;
             transition: .5s ease-in-out;
         }
+        label {
+            order: 1;
+            line-height: 2.4rem;
+            display: inline-block;
+        }
+        input {
+            display: none;
+        }
+        input:checked + span {
+            font-weight: bold;
+        }
         .hidden {
             opacity: 0;
         }
-    }
     
-    button {
-        position: relative;
-        display: block;
-        width: 12.8rem;
-        height: 12.8rem;
-        border-radius: 50%;
-        background: var(--white);
-        background: radial-gradient(circle, rgba(255,255,255,1) 50%, rgb(134, 134, 134) 100%);
-        border: 1rem solid var(--black);
-        margin: 2rem 0;
-        animation: button 3s ease-in-out;
-        animation-iteration-count: 3;
-        
-        &::after {
-            width: 6rem;
-            height: 6rem;
+        button {
+            position: relative;
+            display: block;
+            width: 12.8rem;
+            height: 12.8rem;
             border-radius: 50%;
-            background: rgb(255,255,255);
-            border: .5rem solid grey;
-            content:"";
-            position: absolute;
-            left: 17%; top: 17%;
-            z-index: 2;
+            background: var(--white);
+            background: 
+            radial-gradient(circle, 
+            rgba(255, 255, 255, 1) 50%, 
+            rgba(134, 134, 134, 1) 100%);
+            border: 1rem solid var(--black);
+            margin: 2rem 0;
+            animation: button 3s ease-in-out;
+            animation-iteration-count: 3;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: lightgrey;
+            
+            &::after {
+                content:"";
+                width: 6rem;
+                height: 6rem;
+                border-radius: 50%;
+                border: .5rem solid lightgrey;
+                position: absolute;
+                left: 17%; top: 17%;
+                z-index: 2;
+            }
+            
+            @media (hover: hover) {
+                &:hover { transform: scale(.9); }
+            }
         }
     }
 }
@@ -170,7 +195,7 @@ main {
         height: 9.6rem;
         padding: .4rem;
         border-radius: 1.6rem;
-        background: rgb(252, 243, 251);
+        background: rgb(255, 236, 236);
         flex-shrink: 0;
         scroll-snap-align: start;
 
@@ -215,6 +240,7 @@ main {
             &#sound { background-image: url(img/sound.svg); }
             &#close { 
                 background-image: url(img/close.svg); 
+                text-transform: uppercase;
                 align-self: flex-end;
             }
         }
@@ -306,24 +332,24 @@ main {
 
 #pokedex-info, 
 #pokedex {
-    
+
     .normal {
         background-color: rgb(235, 234, 222);
     }
     .water {
-        background-color: rgb(164, 222, 255);
+        background-color: rgb(175, 228, 254);
     }
     .ice {
-        background-color: rgb(155, 234, 246);
+        background-color: rgb(185, 249, 255);
     }
     .fire {
-        background-color: lightsalmon;
+        background-color: rgb(255, 195, 139);
     }
     .grass {
-        background-color: lightgreen;
+        background-color: rgb(172, 233, 134);
     }
     .bug {
-        background-color: rgb(156, 222, 115);
+        background-color: rgb(142, 217, 147);
     }
     .electric {
         background-color: rgb(253, 241, 197);
@@ -332,7 +358,7 @@ main {
         background-color: rgb(180, 179, 255);
     }
     .psychic {
-        background-color: rgb(208, 203, 255);
+        background-color: rgb(220, 217, 255);
     }
     .poison {
         background-color: rgb(204, 173, 230);
@@ -347,10 +373,10 @@ main {
         background-color: rgb(225, 126, 113);
     }
     .ground {
-        background-color: rgb(195, 160, 139);
+        background-color: rgb(214, 184, 165);
     }
     .rock {
-        background-color: rgb(174, 173, 173);
+        background-color: rgb(206, 206, 206);
     }
 }
 
