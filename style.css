@@ -9,7 +9,7 @@
     --gap: 1.6rem;
     --padding: 2.4rem;
 
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 769px) {
         --gap: 2.4rem;
         --padding: 4.8rem;
     }
@@ -40,6 +40,8 @@ body {
     top: 0; left: 0;
     z-index: -1;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
     opacity: .05;
 }
 
@@ -73,8 +75,7 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50vh;
-    min-height: 20rem;
+    height: 40rem;
     padding-bottom: var(--padding);
     padding-top: var(--padding);
     margin-bottom: -6.4rem;
@@ -87,7 +88,7 @@ header {
     rgba(255, 255, 255, .7) 53%, 
     rgba(255, 255, 255, 0));
 
-    @media screen and (min-width: 1200px) {
+    @media screen and (min-width: 1024px) {
         width: 20vw;
         height: 100vh;
         position: fixed;
@@ -173,7 +174,7 @@ header {
 main {
     padding-bottom: 9.6rem; /* space for footer */
 
-    @media screen and (min-width: 1200px) {
+    @media screen and (min-width: 1024px) {
         width: 80vw;
         padding-top: 0rem;
         margin-left: 20vw;
@@ -214,6 +215,8 @@ main {
     z-index: 100;
     top: 0; left: 0;
     height: 100vh;
+
+    .item-data { text-align: center; }
 
     .pokemon-data,
     .item-data {  
@@ -390,7 +393,7 @@ footer {
     position: absolute;
     bottom: 0;
 
-    @media screen and (min-width: 1200px) {
+    @media screen and (min-width: 1024px) {
         background: transparent;
         color: var(--black);
         padding-left: 20vw;
