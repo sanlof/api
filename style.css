@@ -5,12 +5,41 @@
 
 :root {
     
-    /* färger */
+    /* basfärger */
     --black: #222;
     --white: #fff;
+    --white-70: rgba(255, 255, 255, .7);
+    --white-50: rgba(255, 255, 255, .5);
+    --light-grey: #d3d3d3;
+    --dark-grey: #868686;
+    --red: #d50000;
+    --pink: #ffecec;
+
+    /* pokémontyp-färger */
+    --normal: #ebeade;
+    --water: #afe4fe;
+    --ice: #b9f9ff;
+    --fire: #ffc38b;
+    --grass: #ace986;
+    --bug: #8ed993;
+    --electric: #fdf1c5;
+    --ghost: #b4b3ff;
+    --psychic: #dcd9ff;
+    --poison: #ccade6;
+    --fairy: #ffd0ef;
+    --dragon: #e1ecff;
+    --fighting: #e17e71;
+    --ground: #d6b8a5;
+    --rock: #cecece;
+
+    /* stats-färger */
+    --hp: #4f884f;
+    --attack: #d65454;
+    --defense: #358ffc;
+    --speed: #fdda79;
+    --xp: #555555;
 
     /* mått */
-
     --gap: 1.6rem;
     --padding: 2.4rem;
 
@@ -59,11 +88,11 @@ a {
 }
 
 @keyframes button {
-    0%, 30%, 100% {
+    0%, 100% {
         transform: scale(1);
     }
-    5%, 40% {
-        transform: scale(.9);
+    10%, 60% {
+        transform: scale(.95);
     }
 }
 
@@ -78,32 +107,32 @@ header {
     padding-bottom: var(--padding);
     padding-top: var(--padding);
     margin-bottom: -6.4rem;
-    background: rgb(213,0,0);
+    background: var(--red);
     background: 
     linear-gradient(180deg, 
-    rgba(213, 0, 0, 1) 44%, 
-    rgba(34, 34, 34, 1) 44%, 
-    rgba(34, 34, 34, 1) 53%, 
-    rgba(255, 255, 255, .7) 53%, 
-    rgba(255, 255, 255, 0));
+    var(--red) 44%, 
+    var(--black) 44%, 
+    var(--black) 53%, 
+    var(--white-70) 53%, 
+    transparent);
 
     @media screen and (min-width: 1024px) {
         width: 20vw;
         height: 100vh;
         position: fixed;
-        box-shadow: 0rem 0 2rem lightgrey;
+        box-shadow: 0rem 0 2rem var(--grey);
         background: 
         linear-gradient(180deg, 
-        rgba(213, 0, 0, 1) 46%, 
-        rgba(34, 34, 34, 1) 46%, 
-        rgba(34, 34, 34, 1) 51%, 
-        rgba(255, 255, 255,.5) 0%);
+        var(--red) 46%, 
+        var(--black) 46%, 
+        var(--black) 51%, 
+        var(--white-50) 0%);
     }
 
     h1 {
         font: bold 4rem 'ketchum';
         color: var(--white);
-        text-shadow: .1rem .1rem 0rem black;
+        text-shadow: .1rem .1rem 0rem var(--black);
         margin-bottom: 0;
     }
 
@@ -116,16 +145,16 @@ header {
         label, input, button {
             cursor: pointer;
             opacity: 1;
-            transition: .5s ease-in-out;
+            transition: .1s all;
         }
         label {
             order: 1;
             line-height: 2.4rem;
             display: inline-block;
         }
-        input {
+        /* input {
             display: none;
-        }
+        } */
         input:checked + span {
             font-weight: bold;
         }
@@ -142,18 +171,18 @@ header {
             background: var(--white);
             background: 
             radial-gradient(circle, 
-            rgba(255, 255, 255, 1) 50%, 
-            rgba(134, 134, 134, 1) 100%);
+            var(--white) 50%, 
+            var(--dark-grey) 100%);
             border: 2rem solid var(--black);
             margin: 2rem 0;
-            animation: button 3s ease-out;
+            animation: button 1s;
             animation-iteration-count: 3;
             text-transform: uppercase;
             font-weight: bold;
-            color: lightgrey;
+            color: var(--grey);
             
             @media (hover: hover) {
-                &:hover { transform: scale(.9); }
+                &:hover { transform: scale(.95); }
             }
         }
     }
@@ -323,57 +352,24 @@ main {
     }
 }
 
-
 #pokedex-info, 
 #pokedex {
-
-    .normal {
-        background-color: rgb(235, 234, 222);
-    }
-    .water {
-        background-color: rgb(175, 228, 254);
-    }
-    .ice {
-        background-color: rgb(185, 249, 255);
-    }
-    .fire {
-        background-color: rgb(255, 195, 139);
-    }
-    .grass {
-        background-color: rgb(172, 233, 134);
-    }
-    .bug {
-        background-color: rgb(142, 217, 147);
-    }
-    .electric {
-        background-color: rgb(253, 241, 197);
-    }
-    .ghost {
-        background-color: rgb(180, 179, 255);
-    }
-    .psychic {
-        background-color: rgb(220, 217, 255);
-    }
-    .poison {
-        background-color: rgb(204, 173, 230);
-    }
-    .fairy {
-        background-color: rgb(255, 208, 239);
-    }
-    .dragon {
-        background-color: rgb(225, 236, 255);
-    }
-    .fighting {
-        background-color: rgb(225, 126, 113);
-    }
-    .ground {
-        background-color: rgb(214, 184, 165);
-    }
-    .rock {
-        background-color: rgb(206, 206, 206);
-    }
+    .normal { background-color: var(--normal); }
+    .water { background-color: var(--water); }
+    .ice { background-color: var(--ice); }
+    .fire { background-color: var(--fire); }
+    .grass { background-color: var(--grass); }
+    .bug { background-color: var(--bug); }
+    .electric { background-color: var(--electric); }
+    .ghost { background-color: var(--ghost); }
+    .psychic { background-color: var(--psychic); }
+    .poison { background-color: var(--poison); }
+    .fairy { background-color: var(--fairy); }
+    .dragon { background-color: var(--dragon); }
+    .fighting { background-color: var(--fighting); }
+    .ground { background-color: var(--ground); }
+    .rock { background-color: var(--rock); }
 }
-
 
 footer {
     text-align: center;
