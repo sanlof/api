@@ -1,2 +1,3 @@
-# api
- Public API Consumer
+# pokédex
+
+A pokédex built with the PokéAPI.
