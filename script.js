@@ -7,153 +7,96 @@ const btnFetch = document.getElementById('fetchButton'); // hämta api-data
 const pokedex = document.getElementById('pokedex'); // hitta pokédex-diven
 const pokedex_info = document.getElementById('pokedex-info'); // div för pokemon/item-data
 
-btnFetch.addEventListener('click', (event) => {
+
+const fetchData = async url => {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data; 
+    }  catch (error) {
+        console.error(error);   
+    }
+}
+
+btnFetch.addEventListener('click', async (event) => {
     event.preventDefault(); // förhindra att sidan uppdateras när man skickar formuläret
     pokedex.innerHTML = ''; // töm listan ifall man avmarkerat något alternativ
 
     if (checkbox_pokemon.checked) {
-        fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // väljer endpoint pokémon och begränsar mig till första generationen som omfattar de första 150, från bulbasaur (1) till mew (151)
-        .then((response) => response.json())
-        .then((data) => {
-            fetchAllPokemon = data.results;
-            console.log(data.results); // såhär kan jag kolla vad api:n innehåller via dev tools
-            const pokemons = data.results; // här sparas alla pokémon i en array
-        
 
-            pokemons.forEach(pokemon => { // loopa in alla pokémon från arrayen
-        
-                const pokemon_article = document.createElement('article'); // skapa en article för varje pokémon
-                pokemon_article.setAttribute('id', pokemon.name); // ge article pokémons namn som id
-                pokedex.appendChild(pokemon_article); // appenda article till pokédex
-                
-                const pokemonURL = `${pokemon.url}`; // url till pokémonens egna api (med fler egenskaper)
-        
-                const getPokemon = async (pokemon) => {
-                    try {
-                        const response = await fetch(pokemonURL);
-                        const pokemonData = await response.json();
-                        console.log(pokemonData); // så jag kan kolla api:ns innehåll via dev tools
+        // hämta alla pokemons
 
-                        let pokemon = { // spara ner pokémon-datan i enklare variabler
-                            id:`${pokemonData.id}`,
-                            name: `${pokemonData.name}`,
-                            type: `${pokemonData.types["0"]["type"]["name"]}`,
-                            thumbnail: `${pokemonData.sprites.front_default}`,
-                            thumbnail2: `${pokemonData.sprites.back_default}`,
-                            image: `${pokemonData.sprites.other.dream_world.front_default}`,
-                            hp: `${pokemonData.stats[0].base_stat}`,
-                            attack: `${pokemonData.stats[1].base_stat}`,
-                            defense: `${pokemonData.stats[2].base_stat}`,
-                            speed: `${pokemonData.stats[5].base_stat}`,
-                            xp: `${pokemonData.base_experience}`
-                        }
+        const data = await fetchData('https://pokeapi.co/api/v2/pokemon?limit=151');
+        const pokemons = data.results;
 
-                        /***** innehåll till pokédex *****/
+        pokemons.forEach(pokemon => { // loopa in alla pokémon från arrayen
+    
+            const pokemon_article = document.createElement('article'); // skapa en article för varje pokémon
+            pokemon_article.setAttribute('id', pokemon.name); // ge article pokémons namn som id
+            pokedex.appendChild(pokemon_article); // appenda article till pokédex
+            const pokemonURL = `${pokemon.url}`; // url till pokémonens egna api (med fler egenskaper)
+    
+            const getPokemon = async (pokemon) => {
+                try {
+                    const response = await fetch(pokemonURL);
+                    const pokemonData = await response.json();
+                    console.log(pokemonData); // så jag kan kolla api:ns innehåll via dev tools
 
-                        pokemon_article.classList.add(pokemon.type); // ge class för overall styling
-        
-                        pokemon_article.innerHTML += `
-                        <img src="${pokemon.thumbnail}" 
-                            id="${pokemon.name}" 
-                            alt="${pokemon.name}" 
-                            title="${pokemon.name}" 
-                        />`;
-        
-                        /******* innehåll till pokémon *******/
-        
-                        const pokemon_data = document.createElement('article'); // skapa en article
-                        pokemon_data.classList.add('pokemon-data'); // ge class för overall styling
-                        pokemon_data.classList.add(`${pokemon.type}`); // ge class för styling utifrån pokémons typ
-                        pokemon_data.setAttribute('id', pokemon.name); // ge id utifrån namn för styling på en viss pokémon
-
-                        // räkna om stats till procent
-                        let hpPercentage = calcStatPercentage(pokemon.hp, 250); //chansey
-                        let attackPercentage = calcStatPercentage(pokemon.attack, 134); //dragonite
-                        let defensePercentage = calcStatPercentage(pokemon.defense, 180); //cloyster
-                        let speedPercentage = calcStatPercentage(pokemon.speed, 140); //electrode
-                        let xpPercentage = calcStatPercentage(pokemon.xp, 395); //chansey
-                        function calcStatPercentage(currentStat,maxStat) {
-                            let statPercentage = (currentStat / maxStat) * 100;
-                            return Math.round(statPercentage);
-                        }
-                        
-                        pokemon_data.innerHTML = `
-                        <button id="close">Close</button>
-                        <hgroup>
-                            <h2>${pokemon.name}</h2>
-                            <p class="id-no">N° ${pokemon.id}</p>
-                        </hgroup>
-                        <img src="${pokemon.image}" alt="${pokemon.name}"
-                        onclick="document.getElementById('player-${pokemonData.id}').play()" />
-                        <section class="stats">
-                            <div id="hp">
-                                <p>${pokemonData.stats[0].stat.name}</p>
-                                <div class="stat-bar">
-                                    <div style="width:${hpPercentage}%;"></div>
-                                </div>
-                                <p>${pokemon.hp}</p>
-                                </div>
-                            <div id="attack">
-                                <p>${pokemonData.stats[1].stat.name}</p>
-                                <div class="stat-bar">
-                                    <div style="width:${attackPercentage}%;"></div>
-                                </div>
-                                <p>${pokemon.attack}</p>
-                            </div>
-                            <div id="defense">
-                                <p>${pokemonData.stats[2].stat.name}</p>
-                                <div class="stat-bar">
-                                    <div style="width:${defensePercentage}%;"></div>
-                                </div>
-                                <p>${pokemon.defense}</p>
-                            </div>
-                            <div id="speed">
-                                <p>${pokemonData.stats[5].stat.name}</p>
-                                <div class="stat-bar">
-                                    <div style="width:${speedPercentage}%;"></div>
-                                </div>
-                                <p>${pokemon.speed}</p>
-                            </div>
-                            <div id="xp">
-                                <p>XP</p>
-                                <div class="stat-bar">
-                                    <div style="width:${xpPercentage}%;"></div>
-                                </div>
-                                <p>${pokemon.xp}</p>
-                            </div>
-                            <p class="type">${pokemon.type}</p>
-                        </section>
-                        <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
-                        `;
-                        // <button id="sound" onclick="document.getElementById('player-${pokemonData.id}').play()">Rawr!</button>
-
-                        document.body.addEventListener('click', (event) => {
-                            if (event.target.id === pokemon.name) {
-                                pokedex_info.innerHTML = '';
-                                pokedex_info.appendChild(pokemon_data);
-                            }
-                            else if (event.target.id === 'close')  {
-                                pokedex_info.innerHTML = '';
-                            }
-                        });
-                        
-        
-                    } catch (error) {
-                        console.error(error);
+                    let pokemon = { // spara ner pokémon-datan i enklare variabler
+                        id:`${pokemonData.id}`,
+                        name: `${pokemonData.name}`,
+                        type: `${pokemonData.types["0"]["type"]["name"]}`,
+                        thumbnail: `${pokemonData.sprites.front_default}`,
+                        thumbnail2: `${pokemonData.sprites.back_default}`,
+                        image: `${pokemonData.sprites.other.dream_world.front_default}`,
+                        hp: `${pokemonData.stats[0].base_stat}`,
+                        attack: `${pokemonData.stats[1].base_stat}`,
+                        defense: `${pokemonData.stats[2].base_stat}`,
+                        speed: `${pokemonData.stats[5].base_stat}`,
+                        xp: `${pokemonData.base_experience}`
                     }
-                };
-        
-                getPokemon();
-        
-            }); //close foreach
 
-        }) .catch(error => {
-            console.error('Error fetching data:', error);
-        });
+                    /***** innehåll till pokédex *****/
+
+                    pokemon_article.classList.add(pokemon.type); // ge class för overall styling
+    
+                    pokemon_article.innerHTML += `
+                    <img src="${pokemon.thumbnail}" 
+                        id="${pokemon.name}" 
+                        alt="${pokemon.name}" 
+                        title="${pokemon.name}" 
+                    />`;
+    
+                    /******* innehåll till pokémon *******/
+    
+                    const pokemon_type = document.querySelector('.type');
+                    const pokemon_data = document.createElement('article'); // skapa en article
+                    addContent(pokemon_data, pokemon, pokemonData)
+
+                    document.body.addEventListener('click', (event) => {
+                        if (event.target.id === pokemon.name) {
+                            pokedex_info.innerHTML = '';
+                            pokedex_info.appendChild(pokemon_data);
+                        }
+                        else if (event.target.id === 'close')  {
+                            pokedex_info.innerHTML = '';
+                        }
+                    });
+    
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            
+            getPokemon();
+    
+        }); //close foreach
+
 
     }
 
 if (checkbox_items.checked) {
+    
         fetch('https://pokeapi.co/api/v2/item') // väljer ny endpoint items
         .then((response) => response.json())
         .then((data) => {
@@ -235,3 +178,70 @@ window.addEventListener('scroll', function() {
         }
     });
 });
+
+
+const addContent = (pokemon_data, pokemon, pokemonData) => {
+
+    // räkna om stats till procent
+    let hpPercentage = calcStatPercentage(pokemon.hp, 250); //chansey
+    let attackPercentage = calcStatPercentage(pokemon.attack, 134); //dragonite
+    let defensePercentage = calcStatPercentage(pokemon.defense, 180); //cloyster
+    let speedPercentage = calcStatPercentage(pokemon.speed, 140); //electrode
+    let xpPercentage = calcStatPercentage(pokemon.xp, 395); //chansey
+    function calcStatPercentage(currentStat,maxStat) {
+        let statPercentage = (currentStat / maxStat) * 100;
+        return Math.round(statPercentage);
+    }
+
+    pokemon_data.classList.add('pokemon-data'); // ge class för overall styling
+    pokemon_data.classList.add(`${pokemon.type}`); // ge class för styling utifrån pokémons typ
+    pokemon_data.setAttribute('id', pokemon.name); // ge id utifrån namn för styling på en viss pokémon
+    pokemon_data.innerHTML = `
+    <button id="close">Close</button>
+    <hgroup>
+        <h2>${pokemon.name}</h2>
+        <p class="id-no">N° ${pokemon.id}</p>
+    </hgroup>
+    <img src="${pokemon.image}" alt="${pokemon.name}"
+    onclick="document.getElementById('player-${pokemonData.id}').play()" />
+    <section class="stats">
+        <div id="hp">
+            <p>${pokemonData.stats[0].stat.name}</p>
+            <div class="stat-bar">
+                <div style="width:${hpPercentage}%;"></div>
+            </div>
+            <p>${pokemon.hp}</p>
+            </div>
+        <div id="attack">
+            <p>${pokemonData.stats[1].stat.name}</p>
+            <div class="stat-bar">
+                <div style="width:${attackPercentage}%;"></div>
+            </div>
+            <p>${pokemon.attack}</p>
+        </div>
+        <div id="defense">
+            <p>${pokemonData.stats[2].stat.name}</p>
+            <div class="stat-bar">
+                <div style="width:${defensePercentage}%;"></div>
+            </div>
+            <p>${pokemon.defense}</p>
+        </div>
+        <div id="speed">
+            <p>${pokemonData.stats[5].stat.name}</p>
+            <div class="stat-bar">
+                <div style="width:${speedPercentage}%;"></div>
+            </div>
+            <p>${pokemon.speed}</p>
+        </div>
+        <div id="xp">
+            <p>XP</p>
+            <div class="stat-bar">
+                <div style="width:${xpPercentage}%;"></div>
+            </div>
+            <p>${pokemon.xp}</p>
+        </div>
+        <p class="type"></p>
+    </section>
+    <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
+    `;
+}
