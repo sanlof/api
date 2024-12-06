@@ -24,8 +24,6 @@ btnFetch.addEventListener('click', async (event) => {
 
     if (checkbox_pokemon.checked) {
 
-        // hämta alla pokemons
-
         const data = await fetchData('https://pokeapi.co/api/v2/pokemon?limit=151');
         const pokemons = data.results;
 
@@ -95,14 +93,10 @@ btnFetch.addEventListener('click', async (event) => {
 
     }
 
-if (checkbox_items.checked) {
+    if (checkbox_items.checked) {
     
-        fetch('https://pokeapi.co/api/v2/item') // väljer ny endpoint items
-        .then((response) => response.json())
-        .then((data) => {
-        fetchAllItems = data.results;
-        console.log(data.results); // såhär kan jag kolla vad api:n innehåller via dev tools
-        const items = data.results; // här sparas alla items i en array
+        const data = await fetchData('https://pokeapi.co/api/v2/item');
+        const items = data.results;
 
         items.forEach(item => { 
             const item_article = document.createElement('article'); // skapar en article för varje item
@@ -156,9 +150,8 @@ if (checkbox_items.checked) {
             getItem();
 
         });
-    });
-}
 
+    }
 
 }); //end button
 
