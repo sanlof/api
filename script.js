@@ -23,75 +23,56 @@ btnFetch.addEventListener('click', async (event) => {
     pokedex.innerHTML = ''; // töm listan ifall man avmarkerat något alternativ
 
     if (checkbox_pokemon.checked) {
-
         const data = await fetchData('https://pokeapi.co/api/v2/pokemon?limit=151');
-        const pokemons = data.results;
+        const pokemons = data.results; // pokemons sparas i en array
 
-        pokemons.forEach(pokemon => { // loopa in alla pokémon från arrayen
-    
+        for (const pokemon of pokemons) { // loopa in alla pokémon från arrayen
+            const pokemonData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`);
+            console.log(pokemonData);
+
             const pokemon_article = document.createElement('article'); // skapa en article för varje pokémon
             pokemon_article.setAttribute('id', pokemon.name); // ge article pokémons namn som id
             pokedex.appendChild(pokemon_article); // appenda article till pokédex
-            const pokemonURL = `${pokemon.url}`; // url till pokémonens egna api (med fler egenskaper)
-    
-            const getPokemon = async (pokemon) => {
-                try {
-                    const response = await fetch(pokemonURL);
-                    const pokemonData = await response.json();
-                    console.log(pokemonData); // så jag kan kolla api:ns innehåll via dev tools
 
-                    let pokemon = { // spara ner pokémon-datan i enklare variabler
-                        id:`${pokemonData.id}`,
-                        name: `${pokemonData.name}`,
-                        type: `${pokemonData.types["0"]["type"]["name"]}`,
-                        thumbnail: `${pokemonData.sprites.front_default}`,
-                        thumbnail2: `${pokemonData.sprites.back_default}`,
-                        image: `${pokemonData.sprites.other.dream_world.front_default}`,
-                        hp: `${pokemonData.stats[0].base_stat}`,
-                        attack: `${pokemonData.stats[1].base_stat}`,
-                        defense: `${pokemonData.stats[2].base_stat}`,
-                        speed: `${pokemonData.stats[5].base_stat}`,
-                        xp: `${pokemonData.base_experience}`
-                    }
-
-                    /***** innehåll till pokédex *****/
-
-                    pokemon_article.classList.add(pokemon.type); // ge class för overall styling
-    
-                    pokemon_article.innerHTML += `
-                    <img src="${pokemon.thumbnail}" 
-                        id="${pokemon.name}" 
-                        alt="${pokemon.name}" 
-                        title="${pokemon.name}" 
-                    />`;
-    
-                    /******* innehåll till pokémon *******/
-    
-                    const pokemon_type = document.querySelector('.type');
-                    const pokemon_data = document.createElement('article'); // skapa en article
-                    addContent(pokemon_data, pokemon, pokemonData)
-
-                    document.body.addEventListener('click', (event) => {
-                        if (event.target.id === pokemon.name) {
-                            pokedex_info.innerHTML = '';
-                            pokedex_info.appendChild(pokemon_data);
-                        }
-                        else if (event.target.id === 'close')  {
-                            pokedex_info.innerHTML = '';
-                        }
-                    });
-    
-                } catch (error) {
-                    console.error(error);
-                }
+            const pokemonDetails = { 
+                id: pokemonData.id,
+                name: pokemonData.name,
+                type: pokemonData.types["0"]["type"]["name"],
+                thumbnail: pokemonData.sprites.front_default,
+                thumbnail2: pokemonData.sprites.back_default,
+                image: pokemonData.sprites.other.dream_world.front_default,
+                hp: pokemonData.stats[0].base_stat,
+                attack: pokemonData.stats[1].base_stat,
+                defense: pokemonData.stats[2].base_stat,
+                speed: pokemonData.stats[5].base_stat,
+                xp: pokemonData.base_experience
             };
-            
-            getPokemon();
-    
-        }); //close foreach
 
+            /***** innehåll till pokédex *****/
+            pokemon_article.classList.add(pokemonDetails.type); 
+            pokemon_article.innerHTML += `
+                <img src="${pokemonDetails.thumbnail}" 
+                     id="${pokemon.name}" 
+                     alt="${pokemon.name}" 
+                     title="${pokemon.name}" />
+            `;
 
-    }
+            /******* innehåll till pokémon *******/
+            const pokemon_data = document.createElement('article');  // skapa en article
+            addContent(pokemon_data, pokemonDetails, pokemonData); // funktion för att lägga till datan
+
+            // klicka för att visa pokémondata
+            document.body.addEventListener('click', (event) => {
+                if (event.target.id === pokemon.name) {
+                    pokedex_info.innerHTML = '';
+                    pokedex_info.appendChild(pokemon_data);
+                } else if (event.target.id === 'close') {
+                    pokedex_info.innerHTML = '';
+                }
+            });
+
+        } // end loop
+    } // end if
 
     if (checkbox_items.checked) {
     
@@ -235,6 +216,18 @@ const addContent = (pokemon_data, pokemon, pokemonData) => {
         </div>
         <p class="type"></p>
     </section>
-    <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
     `;
+    if (pokemon.name === 'jigglypuff') {
+        pokemon_data.innerHTML += `
+        <audio id="player-${pokemonData.id}" src="audio/jigglypuff.mp3" type="audio/ogg"></audio>
+        `;
+    } else if (pokemon.name === 'pikachu') {
+        pokemon_data.innerHTML += `
+        <audio id="player-${pokemonData.id}" src="audio/pikachu.mp3" type="audio/ogg"></audio>
+        `;
+    } else {
+        pokemon_data.innerHTML += `
+        <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
+        `;
+    }
 }
