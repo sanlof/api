@@ -27,7 +27,7 @@ btnFetch.addEventListener('click', async (event) => {
         const pokemons = data.results; // pokemons sparas i en array
 
         for (const pokemon of pokemons) { // loopa in alla pokémon från arrayen
-            const pokemonData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`);
+            const pokemonData = await fetchData(`${pokemon.url}`);
             console.log(pokemonData);
 
             const pokemon_article = document.createElement('article'); // skapa en article för varje pokémon
@@ -59,17 +59,8 @@ btnFetch.addEventListener('click', async (event) => {
 
             /******* innehåll till pokémon *******/
             const pokemon_data = document.createElement('article');  // skapa en article
-            addContent(pokemon_data, pokemonDetails, pokemonData); // funktion för att lägga till datan
-
-            // klicka för att visa pokémondata
-            document.body.addEventListener('click', (event) => {
-                if (event.target.id === pokemon.name) {
-                    pokedex_info.innerHTML = '';
-                    pokedex_info.appendChild(pokemon_data);
-                } else if (event.target.id === 'close') {
-                    pokedex_info.innerHTML = '';
-                }
-            });
+            addPokemonContent(pokemon_data, pokemonDetails, pokemonData); // funktion för att lägga till datan
+            pokedexClick(pokedex_info, pokemon_data, pokemon.name); // klicka för att visa pokémonens data
 
         } // end loop
     } // end if
@@ -79,65 +70,43 @@ btnFetch.addEventListener('click', async (event) => {
         const data = await fetchData('https://pokeapi.co/api/v2/item');
         const items = data.results;
 
-        items.forEach(item => { 
+        for (const item of items) { // loopa in alla pokémon från arrayen
+            const itemData = await fetchData(`${item.url}`);
+            console.log(itemData);
+
             const item_article = document.createElement('article'); // skapar en article för varje item
             item_article.setAttribute('id', item.name); // ge article pokémons namn som id
             pokedex.appendChild(item_article); // appendar item-articles till pokédex
             
-            const itemURL = `${item.url}`; // url till itemets egna api (med fler egenskaper)
+            const itemDataName = itemData.name.replace(/-/g, " ");
 
-            const getItem = async (item) => {
-                try {
-                    const response = await fetch(itemURL);
-                    const itemData = await response.json();
-                    const itemDataName = itemData.name.replace(/-/g, " ");
-                    console.log(itemData); // så jag kan kolla api:ns innehåll via dev tools
-    
-                    item_article.innerHTML = `
-                    <img id="${itemData.name}" src="${itemData.sprites.default}" alt="${itemDataName}" title="${itemDataName}">
-                    `;
-    
-                    const item_data = document.createElement('article'); // skapa en article
-                    item_data.classList.add('item-data'); // ge article en class för styling
-                    item_data.setAttribute('id', itemData.name); // ge article items namn som id för styling
-                    item_data.innerHTML = `
-                    <button id="close">Close</button>
-                    <hgroup>
-                        <h2>${itemDataName}</h2>
-                        <p>no ${itemData.id}</p>
-                    </hgroup>
-                    <img src="${itemData.sprites.default}" alt="${itemData.name}" title="${itemData.name}">
-                    <section class="stats">
-                        <p>${itemData.flavor_text_entries[1].text}</p>
-                    </section>
-                    `;
+            item_article.innerHTML = `
+            <img id="${itemData.name}" src="${itemData.sprites.default}" alt="${itemDataName}" title="${itemDataName}">
+            `;
 
-                    document.body.addEventListener('click', (event) => {
-                        if (event.target.id === itemData.name) {
-                            pokedex_info.innerHTML = '';
-                            pokedex_info.appendChild(item_data);
-                        }
-                        else if (event.target.id === 'close')  {
-                            pokedex_info.innerHTML = '';
-                        }
-                    });
-    
-    
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-    
-            getItem();
+            /******* innehåll till pokémon *******/
+            const item_data = document.createElement('article');  // skapa en article
+            addItemContent(item_data, itemData, itemDataName); // funktion för att lägga till datan
+            pokedexClick(pokedex_info, item_data, item.name); // klicka för att visa items data
 
-        });
-
-    }
+        } // end loop
+    } // end if
 
 }); //end button
 
-const idsToHide = ['checkbox-pokemon', 'label-pokemon', 'checkbox-items', 'label-items'];
+function pokedexClick(pokedex_info, data, name) {
+    document.body.addEventListener('click', (event) => {
+        if (event.target.id === name) {
+            pokedex_info.innerHTML = '';
+            pokedex_info.appendChild(data);
+        } else if (event.target.id === 'close') {
+            pokedex_info.innerHTML = '';
+        }
+    });
+}
 
+
+const idsToHide = ['checkbox-pokemon', 'label-pokemon', 'checkbox-items', 'label-items'];
 window.addEventListener('scroll', function() {
     const scrollPosition = window.scrollY;
 
@@ -154,7 +123,7 @@ window.addEventListener('scroll', function() {
 });
 
 
-const addContent = (pokemon_data, pokemon, pokemonData) => {
+const addPokemonContent = (pokemon_data, pokemon, pokemonData) => {
 
     // räkna om stats till procent
     let hpPercentage = calcStatPercentage(pokemon.hp, 250); //chansey
@@ -230,4 +199,20 @@ const addContent = (pokemon_data, pokemon, pokemonData) => {
         <audio id="player-${pokemonData.id}" src="${pokemonData.cries.legacy}" type="audio/ogg"></audio>
         `;
     }
+}
+
+const addItemContent = (item_data, itemData, itemDataName) => {
+    item_data.classList.add('item-data'); // ge article en class för styling
+    item_data.setAttribute('id', itemData.name); // ge article items namn som id för styling
+    item_data.innerHTML = `
+    <button id="close">Close</button>
+    <hgroup>
+        <h2>${itemDataName}</h2>
+        <p>no ${itemData.id}</p>
+    </hgroup>
+    <img src="${itemData.sprites.default}" alt="${itemData.name}" title="${itemData.name}">
+    <section class="stats">
+        <p>${itemData.flavor_text_entries[1].text}</p>
+    </section>
+    `;
 }
